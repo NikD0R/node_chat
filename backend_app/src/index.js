@@ -15,6 +15,17 @@ const rooms = [
   { id: "r2", name: "Random", createdAt: new Date().toISOString() },
 ];
 const messages = [];
+const users = new Map();
+
+app.post("/auth", (req, res) => {
+  const { username } = req.body;
+
+  if (!username || typeof username !== "string") {
+    return rs.status(400).json({ error: "username is required" })
+  }
+
+  res.status(200).json({ ok: true })
+})
 
 const genId = () => Math.random().toString(36).slice(2, 9);
 
@@ -97,10 +108,16 @@ wss.on("connection", (ws) => {
     // accept JSON messages from websocket clients optionally
     try {
       const obj = JSON.parse(raw.toString());
+
+      if (obj.type === "auth") {
+        ws.username = obj.username;
+        return;
+      }
+
       if (obj?.type === "send_message") {
         const { roomId, author, text } = obj;
         if (!roomId || !author || !text) return;
-        const msg = { id: genId(), roomId, author, text, time: new Date().toISOString() };
+        const msg = { id: genId(), roomId, author: ws.username, text, time: new Date().toISOString() };
         messages.push(msg);
         broadcast({ type: "new_message", message: msg });
       }

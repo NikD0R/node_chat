@@ -12,15 +12,15 @@ import { MessagesProvider } from "./context/MessagesContext";
 
 export const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <SocketProvider>
+    <SocketProvider>
+      <AuthProvider>
         <RoomsProvider>
           <MessagesProvider>
             <RootApp />
           </MessagesProvider>
         </RoomsProvider>
-      </SocketProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </SocketProvider>
   );
 };
 
