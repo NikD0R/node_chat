@@ -27,12 +27,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (username) {
       localStorage.setItem("chat_username", username);
       await api.post("/auth", { username });
-      socket.send?.(
-        JSON.stringify({
-          type: "auth",
-          username,
-        })
-      );
+      socket.send?.({
+        type: "auth",
+        username,
+      });
     } else {
       localStorage.removeItem("chat_username");
     }

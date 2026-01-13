@@ -21,7 +21,7 @@ app.post("/auth", (req, res) => {
   const { username } = req.body;
 
   if (!username || typeof username !== "string") {
-    return rs.status(400).json({ error: "username is required" })
+    return res.status(400).json({ error: "username is required" })
   }
 
   res.status(200).json({ ok: true })
